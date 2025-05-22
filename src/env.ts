@@ -1,21 +1,16 @@
+import type { CamelKeys, ReplaceKeys } from 'string-ts'
+
+import { camelKeys, replaceKeys } from 'string-ts'
 import { z } from 'zod'
 
 function makeTypedEnv<T>(schema: (v: unknown) => T) {
+  let cache: CamelKeys<ReplaceKeys<T, 'VITE_', ''>>
+
   return (args: Record<string, unknown>) => {
-    const env = schema({ ...args }) as Record<string, unknown>
-
-    const envWithoutPrefix = Object.fromEntries(
-      Object.entries(env).map(([key, value]) => {
-        if (key.startsWith('VITE_')) {
-          return [key.replace('VITE_', ''), value]
-        }
-        return [key, value]
-      })
-    )
-
-    return envWithoutPrefix as {
-      [K in keyof T as K extends `VITE_${infer Rest}` ? Rest : K]: T[K]
+    if (!cache) {
+      cache = camelKeys(replaceKeys(schema({ ...args }), 'VITE_', ''))
     }
+    return cache
   }
 }
 
