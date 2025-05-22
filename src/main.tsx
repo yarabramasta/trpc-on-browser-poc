@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client'
 
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 
-import {
-  getTrpcTSRouterContext,
-  TRPCReactProvider
-} from './lib/trpc/react.tsx'
+import { getTrpcTSRouterContext, TRPCReactProvider } from './lib/trpc/react.tsx'
 import reportWebVitals from './reportWebVitals.ts'
 import './assets/styles/app.css'
+// @ts-expect-error - ...
+import '@fontsource-variable/geist'
+
 import { routeTree } from './routeTree.gen.ts'
 
 const router = createRouter({

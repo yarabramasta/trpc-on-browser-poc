@@ -1,9 +1,9 @@
 import { createTRPCRouter, publicProcedure } from '../trpc'
+import { pokemonRouter } from './pokemon'
 
 export const appRouter = createTRPCRouter({
-  ping: publicProcedure.query(async ({ ctx: { api } }) => {
-    return await api.pokedex.get('/pokemon').then(res => res.data)
-  })
+  ping: publicProcedure.query(() => 'PONG!!!'),
+  pokemon: pokemonRouter
 })
 
 export type AppRouter = typeof appRouter

@@ -15,6 +15,8 @@
     "with-env": "dotenv -e .env --"
   },
   "dependencies": {
+    "@fontsource-variable/geist": "^5.2.6",
+    "@tailwindcss/vite": "^4.1.7",
     "@tanstack/react-query": "^5.76.1",
     "@tanstack/react-query-devtools": "^5.76.1",
     "@tanstack/react-router": "^1.120.5",
@@ -23,10 +25,18 @@
     "@trpc/server": "^11.1.2",
     "@trpc/tanstack-react-query": "^11.1.2",
     "axios": "^1.9.0",
+    "axios-cache-interceptor": "^1.8.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "idb-keyval": "^6.2.2",
+    "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "string-ts": "^2.2.1",
     "superjson": "^2.2.2",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss": "^4.1.7",
+    "ts-pattern": "^5.7.1",
     "zod": "^3.25.20"
   },
   "devDependencies": {
@@ -48,6 +58,7 @@
     "globals": "^16.0.0",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "tw-animate-css": "^1.3.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5",

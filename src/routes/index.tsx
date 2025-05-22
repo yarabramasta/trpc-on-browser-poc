@@ -1,30 +1,58 @@
-import { Suspense } from 'react'
+import { useMemo } from 'react'
 
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+
+import type { RouterOutputs } from '~/api/trpc'
 
 import { HydrateClient, prefetch, useTRPC } from '~/lib/trpc/react'
 
 export const Route = createFileRoute('/')({
   beforeLoad: async ({ context: { queryClient, trpc } }) => {
-    prefetch(trpc.ping.queryOptions(), queryClient)
+    prefetch(trpc.pokemon.getBatch.queryOptions({}), queryClient)
   },
-  component: RouteComponent
+  component: RouteComponent,
+  pendingComponent: () => <div>Loading...</div>,
+  errorComponent: ({ error, reset }) => (
+    <div>
+      <button type="button" onClick={reset}>
+        Try again
+      </button>
+      <p>{error.message}</p>
+    </div>
+  )
 })
 
 function RouteComponent() {
   return (
     <HydrateClient>
-      <Suspense fallback={<div>Loading...</div>}>
-        <PokemonData />
-      </Suspense>
+      <PokemonData />
     </HydrateClient>
   )
 }
 
 function PokemonData() {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.ping.queryOptions())
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery<RouterOutputs['pokemon']['getBatch']>(
+      trpc.pokemon.getBatch.infiniteQueryOptions(
+        {},
+        {
+          getNextPageParam: (lastPage, _pages) => lastPage.next
+        }
+      ) as any
+    )
 
-  return <pre>{JSON.stringify(data, null, 2)}</pre>
+  const flatten = useMemo(
+    () => data.pages.flatMap(({ items }) => items),
+    [data]
+  )
+
+  return (
+    <div>
+      {flatten.map(({ name }) => (
+        <pre key={`pokemon-${name}`}>{name}</pre>
+      ))}
+    </div>
+  )
 }
