@@ -6,7 +6,7 @@ import { createRouter, RouterProvider } from '@tanstack/react-router'
 import {
   getTrpcTSRouterContext,
   TRPCReactProvider
-} from './lib/trpc/context.tsx'
+} from './lib/trpc/react.tsx'
 import reportWebVitals from './reportWebVitals.ts'
 import './assets/styles/app.css'
 import { routeTree } from './routeTree.gen.ts'
@@ -28,7 +28,7 @@ declare module '@tanstack/react-router' {
   }
 }
 
-const rootElement = document.getElementById('app')
+const rootElement = document.getElementById('root')
 
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)

@@ -2,7 +2,7 @@ import Axios from 'axios'
 
 import { getEnv } from '../env'
 
-const api = Axios.create({
+const pokedexApi = Axios.create({
   baseURL: getEnv(import.meta.env).pokedexApiBaseUrl
 })
 
@@ -22,6 +22,10 @@ const handleAxiosError = (
     status: 500,
     message: 'Something went wrong'
   }
+}
+
+const api = {
+  pokedex: pokedexApi
 }
 
 export { api, handleAxiosError }

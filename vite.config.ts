@@ -1,6 +1,5 @@
 import { resolve } from 'node:path'
 
-import { cloudflare } from '@cloudflare/vite-plugin'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
@@ -19,7 +18,6 @@ export default defineConfig({
         plugins: [['babel-plugin-react-compiler', { target: '19' }]]
       }
     }),
-    cloudflare(),
     tsconfigPaths({ projects: ['./tsconfig.json'] })
   ],
   resolve: {
