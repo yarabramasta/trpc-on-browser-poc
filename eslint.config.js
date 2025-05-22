@@ -1,28 +1,63 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
+import antfu from '@antfu/eslint-config'
+import prettierPlugin from 'eslint-plugin-prettier/recommended'
+import prettierOptions from './prettier.config.js'
 
-export default tseslint.config(
-  { ignores: ['dist'] },
+export default antfu(
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+    formatters: {
+      prettierOptions,
+      css: true,
+      markdown: false,
     },
-    plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
-    },
+    stylistic: false,
+    react: true,
+    ignores: [
+      'node_modules',
+      'pnpm-lock.yaml',
+      '.output',
+      '.vinxi',
+      '**/routeTree.gen.ts',
+    ],
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
     rules: {
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
+      'perfectionist/sort-imports': [
+        'error',
+        {
+          internalPattern: ['^~/.+'],
+          newlinesBetween: 'always',
+          groups: [
+            'node',
+            'react',
+            'type',
+            ['builtin', 'external'],
+            'internal-type',
+            'internal',
+            ['parent-type', 'sibling-type', 'index-type'],
+            ['parent', 'sibling', 'index'],
+            'object',
+            'unknown',
+          ],
+          customGroups: {
+            value: {
+              node: ['^node:.+'],
+              react: ['^react$', '^react-.+'],
+            },
+            type: {
+              node: ['^node:.+'],
+              react: ['^react$', '^react-.+'],
+            },
+          },
+        },
       ],
+      'react-refresh/only-export-components': 'off',
+      'no-console': 'off',
+      'antfu/no-top-level-await': 'off',
+      'react/prefer-destructuring-assignment': 'off',
+      'test/padding-around-all': 'error',
+      'test/prefer-lowercase-title': 'off',
     },
   },
+  prettierPlugin,
 )
