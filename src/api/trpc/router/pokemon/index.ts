@@ -9,6 +9,7 @@ import type { Pokemon } from './dto'
 import type { GetPokemonByIdResponse, GetPokemonResponse } from './types'
 
 import { publicProcedure } from '../../trpc'
+import { pokemonSchema } from './dto'
 
 export const pokemonRouter = {
   getBatch: publicProcedure
@@ -16,6 +17,14 @@ export const pokemonRouter = {
       z.object({
         limit: z.number().min(1).max(50).default(20),
         cursor: z.number().min(0).default(0)
+      })
+    )
+    .output(
+      z.object({
+        items: z.array(pokemonSchema),
+        total: z.number(),
+        next: z.number().nullish(),
+        previous: z.number().nullish()
       })
     )
     .query(async ({ input: { limit, cursor: offset }, ctx: { api } }) => {
@@ -55,6 +64,7 @@ export const pokemonRouter = {
 
         return {
           items: results,
+          total: pokemon.count,
           next: getOffsetFromUrl(pokemon.next),
           previous: getOffsetFromUrl(pokemon.previous)
         }

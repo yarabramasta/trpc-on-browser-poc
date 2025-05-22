@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -43,16 +41,36 @@ function PokemonData() {
       ) as any
     )
 
-  const flatten = useMemo(
-    () => data.pages.flatMap(({ items }) => items),
-    [data]
-  )
+  const pokemons = data.pages.flatMap(({ items }) => items)
 
   return (
-    <div>
-      {flatten.map(({ name }) => (
-        <pre key={`pokemon-${name}`}>{name}</pre>
-      ))}
+    <div className="flex h-dvh w-full flex-col overflow-x-hidden">
+      <header className="bg-background sticky inset-x-0 top-0 px-4">
+        <nav className="relative flex h-16 items-center">
+          <button
+            type="button"
+            onClick={e => {
+              e.preventDefault()
+              fetchNextPage()
+            }}
+            disabled={!hasNextPage || isFetchingNextPage}
+            className="h-9 border px-3 text-sm font-medium disabled:opacity-50"
+          >
+            {isFetchingNextPage
+              ? 'Loading more...'
+              : hasNextPage
+                ? 'Load More'
+                : 'Nothing more to load'}
+          </button>
+        </nav>
+      </header>
+      <main className="flex-1">
+        <ul className="flex flex-wrap gap-4 p-4">
+          {pokemons.map(({ name }) => (
+            <li key={`pokemon-${name}`}>{name}</li>
+          ))}
+        </ul>
+      </main>
     </div>
   )
 }
